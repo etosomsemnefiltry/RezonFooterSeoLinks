@@ -3,7 +3,7 @@ import './page/sw-settings-rezon-footer-seo-category-links';
 const { Module } = Shopware;
 
 Module.register('sw-settings-rezon-footer-seo-category-links', {
-    type: 'core',
+    type: 'plugin',
     name: 'settings-rezon-footer-seo-category-links',
     title: 'rezon-footer-seo-category-links.general.mainMenuItemGeneral',
     description: 'rezon-footer-seo-category-links.general.descriptionTextModule',
@@ -20,6 +20,13 @@ Module.register('sw-settings-rezon-footer-seo-category-links', {
                 privilege: 'system.system_config',
             },
         },
+    },
+
+    settingsItem: {
+        group: 'plugins',
+        to: 'sw.settings.rezon.footer.seo.category.links.index',
+        icon: 'regular-cog',
+        privilege: 'system.system_config',
     },
 });
 
