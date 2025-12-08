@@ -8,7 +8,7 @@
 
         <service id="RezonFooterSeoCategoryLinks\Service\FooterCategoryService">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-            <argument type="service" id="Shopware\Core\Content\Category\CategoryDefinition.repository"/>
+            <argument type="service" id="category.repository"/>
         </service>
 
         <service id="RezonFooterSeoCategoryLinks\Subscriber\FooterSubscriber">

@@ -2,90 +2,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
 
-    <card>
-        <title>Block 1</title>
-        <title lang="de-DE">Block 1</title>
-        <input-field type="multi-entity-select">
-            <name>RezonFooterSeoCategoryLinks.config.block1Categories</name>
-            <label>Kategorien für Block 1</label>
-            <label lang="de-DE">Kategorien für Block 1</label>
-            <helpText>Wählen Sie bis zu 5 Kategorien für Block 1 aus</helpText>
-            <helpText lang="de-DE">Wählen Sie bis zu 5 Kategorien für Block 1 aus</helpText>
-            <options>
-                <option>
-                    <id>category</id>
-                </option>
-            </options>
-        </input-field>
-    </card>
-
-    <card>
-        <title>Block 2</title>
-        <title lang="de-DE">Block 2</title>
-        <input-field type="multi-entity-select">
-            <name>RezonFooterSeoCategoryLinks.config.block2Categories</name>
-            <label>Kategorien für Block 2</label>
-            <label lang="de-DE">Kategorien für Block 2</label>
-            <helpText>Wählen Sie bis zu 5 Kategorien für Block 2 aus</helpText>
-            <helpText lang="de-DE">Wählen Sie bis zu 5 Kategorien für Block 2 aus</helpText>
-            <options>
-                <option>
-                    <id>category</id>
-                </option>
-            </options>
-        </input-field>
-    </card>
-
-    <card>
-        <title>Block 3</title>
-        <title lang="de-DE">Block 3</title>
-        <input-field type="multi-entity-select">
-            <name>RezonFooterSeoCategoryLinks.config.block3Categories</name>
-            <label>Kategorien für Block 3</label>
-            <label lang="de-DE">Kategorien für Block 3</label>
-            <helpText>Wählen Sie bis zu 5 Kategorien für Block 3 aus</helpText>
-            <helpText lang="de-DE">Wählen Sie bis zu 5 Kategorien für Block 3 aus</helpText>
-            <options>
-                <option>
-                    <id>category</id>
-                </option>
-            </options>
-        </input-field>
-    </card>
-
-    <card>
-        <title>Block 4</title>
-        <title lang="de-DE">Block 4</title>
-        <input-field type="multi-entity-select">
-            <name>RezonFooterSeoCategoryLinks.config.block4Categories</name>
-            <label>Kategorien für Block 4</label>
-            <label lang="de-DE">Kategorien für Block 4</label>
-            <helpText>Wählen Sie bis zu 5 Kategorien für Block 4 aus</helpText>
-            <helpText lang="de-DE">Wählen Sie bis zu 5 Kategorien für Block 4 aus</helpText>
-            <options>
-                <option>
-                    <id>category</id>
-                </option>
-            </options>
-        </input-field>
-    </card>
-
-    <card>
-        <title>Block 5</title>
-        <title lang="de-DE">Block 5</title>
-        <input-field type="multi-entity-select">
-            <name>RezonFooterSeoCategoryLinks.config.block5Categories</name>
-            <label>Kategorien für Block 5</label>
-            <label lang="de-DE">Kategorien für Block 5</label>
-            <helpText>Wählen Sie bis zu 5 Kategorien für Block 5 aus</helpText>
-            <helpText lang="de-DE">Wählen Sie bis zu 5 Kategorien für Block 5 aus</helpText>
-            <options>
-                <option>
-                    <id>category</id>
-                </option>
-            </options>
-        </input-field>
-    </card>
+    <!--
+        Настройки плагина доступны через админ-модуль:
+        Настройки → Система → Footer SEO Kategorien Links
+    -->
 
 </config>
-

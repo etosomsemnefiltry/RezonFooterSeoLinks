@@ -7,6 +7,7 @@ use Shopware\Core\Content\Category\CategoryDefinition;
 use Shopware\Core\Content\Category\CategoryEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -14,11 +15,11 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 class FooterCategoryService
 {
     private SystemConfigService $systemConfigService;
-    private EntityRepository $categoryRepository;
+    private EntityRepositoryInterface $categoryRepository;
 
     public function __construct(
         SystemConfigService $systemConfigService,
-        EntityRepository $categoryRepository
+        EntityRepositoryInterface $categoryRepository
     ) {
         $this->systemConfigService = $systemConfigService;
         $this->categoryRepository = $categoryRepository;

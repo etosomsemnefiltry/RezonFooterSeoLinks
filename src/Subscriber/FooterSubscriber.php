@@ -5,7 +5,7 @@ namespace RezonFooterSeoCategoryLinks\Subscriber;
 use RezonFooterSeoCategoryLinks\Service\FooterCategoryService;
 use Shopware\Storefront\Page\Footer\FooterPageLoadedEvent;
 use Shopware\Storefront\Page\PageLoadedEvent;
-use Symfony\Component\EventSubscriber\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class FooterSubscriber implements EventSubscriberInterface
 {
