@@ -1,0 +1,21 @@
+{
+  "rezon-footer-seo-category-links": {
+    "general": {
+      "mainMenuItemGeneral": "Footer SEO Kategorien Links",
+      "descriptionTextModule": "Verwaltung der Footer SEO Kategorien Links",
+      "cardTitle": "Kategorien Blöcke konfigurieren",
+      "blockTitle": "Block {0}",
+      "categoryLabel": "Kategorien",
+      "categoryPlaceholder": "Kategorien auswählen",
+      "helpText": "Sie können bis zu 5 Kategorien pro Block auswählen",
+      "saveButton": "Speichern",
+      "saveSuccessTitle": "Erfolg",
+      "saveSuccessMessage": "Die Konfiguration wurde erfolgreich gespeichert",
+      "saveErrorTitle": "Fehler",
+      "saveErrorMessage": "Beim Speichern der Konfiguration ist ein Fehler aufgetreten",
+      "limitReachedTitle": "Limit erreicht",
+      "limitReachedMessage": "Sie können maximal 5 Kategorien pro Block auswählen"
+    }
+  }
+}
+

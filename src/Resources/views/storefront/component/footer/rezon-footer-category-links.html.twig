@@ -1,0 +1,62 @@
+{% block rezon_footer_category_links %}
+    {% set categoryBlocks = page.getExtension('rezonFooterCategoryBlocks') %}
+
+    {% if categoryBlocks and categoryBlocks|length > 0 %}
+        <div class="footer-category-links">
+            {% block rezon_footer_category_links_container %}
+                <div class="container">
+                    <div class="row footer-category-links-row">
+                        {% for block in categoryBlocks %}
+                            {% block rezon_footer_category_links_block %}
+                                <div class="footer-category-links-block">
+                                    {% if block.title %}
+                                        {% block rezon_footer_category_links_block_title %}
+                                            <h4 class="footer-category-links-block-title">{{ block.title }}</h4>
+                                        {% endblock %}
+                                    {% endif %}
+
+                                    {% block rezon_footer_category_links_block_list %}
+                                        <ul class="footer-category-links-list">
+                                            {% for category in block.categories %}
+                                                {% block rezon_footer_category_links_item %}
+                                                    <li class="footer-category-links-item">
+                                                        {% set categoryUrl = null %}
+                                                        
+                                                        {% if category.externalLink %}
+                                                            {% set categoryUrl = category.externalLink %}
+                                                        {% elseif category.seoUrls and category.seoUrls|length > 0 %}
+                                                            {% for seoUrl in category.seoUrls %}
+                                                                {% if seoUrl.isCanonical %}
+                                                                    {% set categoryUrl = '/' ~ seoUrl.seoPathInfo %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {% if not categoryUrl %}
+                                                                {% set seoUrl = category.seoUrls|first %}
+                                                                {% set categoryUrl = '/' ~ seoUrl.seoPathInfo %}
+                                                            {% endif %}
+                                                        {% endif %}
+
+                                                        {% if categoryUrl %}
+                                                            <a href="{{ categoryUrl }}" class="footer-category-links-link" title="{{ category.translated.name|default(category.name) }}">
+                                                                {{ category.translated.name|default(category.name) }}
+                                                            </a>
+                                                        {% else %}
+                                                            <span class="footer-category-links-text">
+                                                                {{ category.translated.name|default(category.name) }}
+                                                            </span>
+                                                        {% endif %}
+                                                    </li>
+                                                {% endblock %}
+                                            {% endfor %}
+                                        </ul>
+                                    {% endblock %}
+                                </div>
+                            {% endblock %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+

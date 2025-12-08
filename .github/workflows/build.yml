@@ -1,0 +1,87 @@
+name: Build Plugin
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get plugin version
+        id: plugin-version
+        run: |
+          VERSION=$(grep -oP '"version":\s*"\K[^"]+' composer.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Plugin version: $VERSION"
+
+      - name: Setup Shopware CLI
+        run: |
+          curl -1sLf 'https://dl.cloudsmith.io/public/friendsofshopware/stable/setup.deb.sh' | sudo -E bash
+          sudo apt-get update
+          sudo apt-get install -y shopware-cli
+          shopware-cli --version
+
+      - name: Package plugin (zip)
+        run: |
+          shopware-cli extension zip "."
+          ls -la *.zip
+
+      - name: Rename archive with version
+        run: |
+          PLUGIN_NAME="RezonCategorySlider"
+          VERSION="${{ steps.plugin-version.outputs.version }}"
+          OLD_NAME=$(ls *.zip | head -1)
+          NEW_NAME="${PLUGIN_NAME}-v${VERSION}-${GITHUB_SHA:0:7}.zip"
+          mv "$OLD_NAME" "$NEW_NAME"
+          echo "archive_name=${NEW_NAME}" >> $GITHUB_OUTPUT
+          echo "Renamed archive to: ${NEW_NAME}"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-archive
+          path: "*.zip"
+          retention-days: 30
+
+      - name: Create release info
+        run: |
+          echo "## Plugin Build Information" >> build-info.md
+          echo "" >> build-info.md
+          echo "- **Version:** ${{ steps.plugin-version.outputs.version }}" >> build-info.md
+          echo "- **Commit:** ${{ github.sha }}" >> build-info.md
+          echo "- **Branch:** ${{ github.ref_name }}" >> build-info.md
+          echo "- **Build Date:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> build-info.md
+          echo "" >> build-info.md
+          echo "### Download" >> build-info.md
+          echo "Архив плагина доступен в разделе Artifacts этого workflow." >> build-info.md
+
+      - name: Upload build info
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-info
+          path: build-info.md
+          retention-days: 30
+
+  attach-to-release:
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin-archive
+          path: dist
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip

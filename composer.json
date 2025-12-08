@@ -1,0 +1,28 @@
+{
+    "name": "custom/rezon-footer-seo-category-links",
+    "description": "Rezon Footer SEO Category Links",
+    "version": "1.0.0",
+    "type": "shopware-platform-plugin",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "REZON IT Solutions. Pavel Borik"
+        }
+    ],
+    "require": {
+        "shopware/core": "~6.7.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "RezonFooterSeoCategoryLinks\\RezonFooterSeoCategoryLinks",
+        "copyright": "(c) by REZON",
+        "label": {
+            "en-GB": "Rezon Footer SEO Category Links",
+            "de-DE": "Rezon Footer SEO Category Links"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "RezonFooterSeoCategoryLinks\\": "src/"
+        }
+    }
+}

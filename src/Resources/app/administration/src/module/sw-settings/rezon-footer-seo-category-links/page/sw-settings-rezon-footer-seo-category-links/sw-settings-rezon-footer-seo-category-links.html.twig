@@ -1,0 +1,275 @@
+{% block sw_settings_rezon_footer_seo_category_links %}
+    <sw-page class="sw-settings-rezon-footer-seo-category-links">
+        {% block sw_settings_rezon_footer_seo_category_links_header %}
+            <template #smart-bar-header>
+                <h2>
+                    {{ $tc('rezon-footer-seo-category-links.general.mainMenuItemGeneral') }}
+                </h2>
+            </template>
+        {% endblock %}
+
+        {% block sw_settings_rezon_footer_seo_category_links_actions %}
+            <template #smart-bar-actions>
+                <sw-button-process
+                    :is-loading="isLoading"
+                    :process-success="isSaveSuccessful"
+                    variant="primary"
+                    @process-finish="saveFinish"
+                    @click="onSave"
+                >
+                    {{ $tc('rezon-footer-seo-category-links.general.saveButton') }}
+                </sw-button-process>
+            </template>
+        {% endblock %}
+
+        {% block sw_settings_rezon_footer_seo_category_links_content %}
+            <template #content>
+                <sw-card-view>
+                    <sw-card
+                        v-if="!isLoading"
+                        :title="$tc('rezon-footer-seo-category-links.general.cardTitle')"
+                        :is-loading="isLoading"
+                    >
+                        <div class="sw-settings-rezon-footer-seo-category-links__blocks">
+                            {% block sw_settings_rezon_footer_seo_category_links_block_1 %}
+                                <div class="sw-settings-rezon-footer-seo-category-links__block">
+                                    <h3>{{ $tc('rezon-footer-seo-category-links.general.blockTitle', 1) }}</h3>
+                                    <sw-entity-multi-select
+                                        v-model:entity-collection="categoryCollections.block1"
+                                        entity="category"
+                                        :label="$tc('rezon-footer-seo-category-links.general.categoryLabel')"
+                                        :placeholder="$tc('rezon-footer-seo-category-links.general.categoryPlaceholder')"
+                                        :criteria="categoryCriteria"
+                                        :fetch-function="fetchCategories"
+                                        :limit="5"
+                                        @update:entity-collection="onCategoryChange(1, $event)"
+                                    >
+                                        <template #selection-label-property="{ item }">
+                                            <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                {{ getCategoryDisplayName(item) }}
+                                            </span>
+                                            <span
+                                                v-if="getCategoryBreadcrumbLabel(item)"
+                                                class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                            >
+                                                - {{ getCategoryBreadcrumbLabel(item) }}
+                                            </span>
+                                        </template>
+                                        <template #result-item="{ item, index }">
+                                            <slot
+                                                name="result-item"
+                                                v-bind="{ item, index }"
+                                            >
+                                                <sw-select-result v-bind="{ item, index, selected: isSelected(item.id, categoryCollections.block1)}">
+                                                    <span class="sw-select-result__result-item-text">
+                                                        <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                            {{ getCategoryDisplayName(item) }}
+                                                        </span>
+                                                        <span
+                                                            v-if="getCategoryBreadcrumbLabel(item)"
+                                                            class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                                        >
+                                                            - {{ getCategoryBreadcrumbLabel(item) }}
+                                                        </span>
+                                                    </span>
+                                                </sw-select-result>
+                                            </slot>
+                                        </template>
+                                    </sw-entity-multi-select>
+                                    <p class="sw-settings-rezon-footer-seo-category-links__help-text">
+                                        {{ $tc('rezon-footer-seo-category-links.general.helpText') }}
+                                    </p>
+                                </div>
+                            {% endblock %}
+
+                            {% block sw_settings_rezon_footer_seo_category_links_block_2 %}
+                                <div class="sw-settings-rezon-footer-seo-category-links__block">
+                                    <h3>{{ $tc('rezon-footer-seo-category-links.general.blockTitle', 2) }}</h3>
+                                    <sw-entity-multi-select
+                                        v-model:entity-collection="categoryCollections.block2"
+                                        entity="category"
+                                        :label="$tc('rezon-footer-seo-category-links.general.categoryLabel')"
+                                        :placeholder="$tc('rezon-footer-seo-category-links.general.categoryPlaceholder')"
+                                        :criteria="categoryCriteria"
+                                        :fetch-function="fetchCategories"
+                                        :limit="5"
+                                        @update:entity-collection="onCategoryChange(2, $event)"
+                                    >
+                                        <template #selection-label-property="{ item }">
+                                            <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                {{ getCategoryDisplayName(item) }}
+                                            </span>
+                                            <span
+                                                v-if="getCategoryBreadcrumbLabel(item)"
+                                                class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                            >
+                                                - {{ getCategoryBreadcrumbLabel(item) }}
+                                            </span>
+                                        </template>
+                                        <template #result-item="{ item, index }">
+                                            <sw-select-result v-bind="{ item, index, selected: isSelected(item.id, categoryCollections.block2)}">
+                                                <span class="sw-select-result__result-item-text">
+                                                    <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                        {{ getCategoryDisplayName(item) }}
+                                                    </span>
+                                                    <span
+                                                        v-if="getCategoryBreadcrumbLabel(item)"
+                                                        class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                                    >
+                                                        - {{ getCategoryBreadcrumbLabel(item) }}
+                                                    </span>
+                                                </span>
+                                            </sw-select-result>
+                                        </template>
+                                    </sw-entity-multi-select>
+                                    <p class="sw-settings-rezon-footer-seo-category-links__help-text">
+                                        {{ $tc('rezon-footer-seo-category-links.general.helpText') }}
+                                    </p>
+                                </div>
+                            {% endblock %}
+
+                            {% block sw_settings_rezon_footer_seo_category_links_block_3 %}
+                                <div class="sw-settings-rezon-footer-seo-category-links__block">
+                                    <h3>{{ $tc('rezon-footer-seo-category-links.general.blockTitle', 3) }}</h3>
+                                    <sw-entity-multi-select
+                                        v-model:entity-collection="categoryCollections.block3"
+                                        entity="category"
+                                        :label="$tc('rezon-footer-seo-category-links.general.categoryLabel')"
+                                        :placeholder="$tc('rezon-footer-seo-category-links.general.categoryPlaceholder')"
+                                        :criteria="categoryCriteria"
+                                        :fetch-function="fetchCategories"
+                                        :limit="5"
+                                        @update:entity-collection="onCategoryChange(3, $event)"
+                                    >
+                                        <template #selection-label-property="{ item }">
+                                            <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                {{ getCategoryDisplayName(item) }}
+                                            </span>
+                                            <span
+                                                v-if="getCategoryBreadcrumbLabel(item)"
+                                                class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                            >
+                                                - {{ getCategoryBreadcrumbLabel(item) }}
+                                            </span>
+                                        </template>
+                                        <template #result-item="{ item, index }">
+                                            <sw-select-result v-bind="{ item, index, selected: isSelected(item.id, categoryCollections.block3)}">
+                                                <span class="sw-select-result__result-item-text">
+                                                    <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                        {{ getCategoryDisplayName(item) }}
+                                                    </span>
+                                                    <span
+                                                        v-if="getCategoryBreadcrumbLabel(item)"
+                                                        class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                                    >
+                                                        - {{ getCategoryBreadcrumbLabel(item) }}
+                                                    </span>
+                                                </span>
+                                            </sw-select-result>
+                                        </template>
+                                    </sw-entity-multi-select>
+                                    <p class="sw-settings-rezon-footer-seo-category-links__help-text">
+                                        {{ $tc('rezon-footer-seo-category-links.general.helpText') }}
+                                    </p>
+                                </div>
+                            {% endblock %}
+
+                            {% block sw_settings_rezon_footer_seo_category_links_block_4 %}
+                                <div class="sw-settings-rezon-footer-seo-category-links__block">
+                                    <h3>{{ $tc('rezon-footer-seo-category-links.general.blockTitle', 4) }}</h3>
+                                    <sw-entity-multi-select
+                                        v-model:entity-collection="categoryCollections.block4"
+                                        entity="category"
+                                        :label="$tc('rezon-footer-seo-category-links.general.categoryLabel')"
+                                        :placeholder="$tc('rezon-footer-seo-category-links.general.categoryPlaceholder')"
+                                        :criteria="categoryCriteria"
+                                        :fetch-function="fetchCategories"
+                                        :limit="5"
+                                        @update:entity-collection="onCategoryChange(4, $event)"
+                                    >
+                                        <template #selection-label-property="{ item }">
+                                            <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                {{ getCategoryDisplayName(item) }}
+                                            </span>
+                                            <span
+                                                v-if="getCategoryBreadcrumbLabel(item)"
+                                                class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                            >
+                                                - {{ getCategoryBreadcrumbLabel(item) }}
+                                            </span>
+                                        </template>
+                                        <template #result-item="{ item, index }">
+                                            <sw-select-result v-bind="{ item, index, selected: isSelected(item.id, categoryCollections.block4)}">
+                                                <span class="sw-select-result__result-item-text">
+                                                    <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                        {{ getCategoryDisplayName(item) }}
+                                                    </span>
+                                                    <span
+                                                        v-if="getCategoryBreadcrumbLabel(item)"
+                                                        class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                                    >
+                                                        - {{ getCategoryBreadcrumbLabel(item) }}
+                                                    </span>
+                                                </span>
+                                            </sw-select-result>
+                                        </template>
+                                    </sw-entity-multi-select>
+                                    <p class="sw-settings-rezon-footer-seo-category-links__help-text">
+                                        {{ $tc('rezon-footer-seo-category-links.general.helpText') }}
+                                    </p>
+                                </div>
+                            {% endblock %}
+
+                            {% block sw_settings_rezon_footer_seo_category_links_block_5 %}
+                                <div class="sw-settings-rezon-footer-seo-category-links__block">
+                                    <h3>{{ $tc('rezon-footer-seo-category-links.general.blockTitle', 5) }}</h3>
+                                    <sw-entity-multi-select
+                                        v-model:entity-collection="categoryCollections.block5"
+                                        entity="category"
+                                        :label="$tc('rezon-footer-seo-category-links.general.categoryLabel')"
+                                        :placeholder="$tc('rezon-footer-seo-category-links.general.categoryPlaceholder')"
+                                        :criteria="categoryCriteria"
+                                        :fetch-function="fetchCategories"
+                                        :limit="5"
+                                        @update:entity-collection="onCategoryChange(5, $event)"
+                                    >
+                                        <template #selection-label-property="{ item }">
+                                            <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                {{ getCategoryDisplayName(item) }}
+                                            </span>
+                                            <span
+                                                v-if="getCategoryBreadcrumbLabel(item)"
+                                                class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                            >
+                                                - {{ getCategoryBreadcrumbLabel(item) }}
+                                            </span>
+                                        </template>
+                                        <template #result-item="{ item, index }">
+                                            <sw-select-result v-bind="{ item, index, selected: isSelected(item.id, categoryCollections.block5)}">
+                                                <span class="sw-select-result__result-item-text">
+                                                    <span class="sw-settings-rezon-footer-seo-category-links__category-label-main">
+                                                        {{ getCategoryDisplayName(item) }}
+                                                    </span>
+                                                    <span
+                                                        v-if="getCategoryBreadcrumbLabel(item)"
+                                                        class="sw-settings-rezon-footer-seo-category-links__category-label-parent"
+                                                    >
+                                                        - {{ getCategoryBreadcrumbLabel(item) }}
+                                                    </span>
+                                                </span>
+                                            </sw-select-result>
+                                        </template>
+                                    </sw-entity-multi-select>
+                                    <p class="sw-settings-rezon-footer-seo-category-links__help-text">
+                                        {{ $tc('rezon-footer-seo-category-links.general.helpText') }}
+                                    </p>
+                                </div>
+                            {% endblock %}
+                        </div>
+                    </sw-card>
+                </sw-card-view>
+            </template>
+        {% endblock %}
+    </sw-page>
+{% endblock %}
+

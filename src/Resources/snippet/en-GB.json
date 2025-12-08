@@ -1,0 +1,21 @@
+{
+  "rezon-footer-seo-category-links": {
+    "general": {
+      "mainMenuItemGeneral": "Footer SEO Category Links",
+      "descriptionTextModule": "Manage Footer SEO Category Links",
+      "cardTitle": "Configure Category Blocks",
+      "blockTitle": "Block {0}",
+      "categoryLabel": "Categories",
+      "categoryPlaceholder": "Select categories",
+      "helpText": "You can select up to 5 categories per block",
+      "saveButton": "Save",
+      "saveSuccessTitle": "Success",
+      "saveSuccessMessage": "Configuration has been saved successfully",
+      "saveErrorTitle": "Error",
+      "saveErrorMessage": "An error occurred while saving the configuration",
+      "limitReachedTitle": "Limit reached",
+      "limitReachedMessage": "You can select a maximum of 5 categories per block"
+    }
+  }
+}
+
