@@ -38,7 +38,7 @@ jobs:
 
       - name: Rename archive with version
         run: |
-          PLUGIN_NAME="RezonCategorySlider"
+          PLUGIN_NAME="RezonFooterSeoCategoryLinks"
           VERSION="${{ steps.plugin-version.outputs.version }}"
           OLD_NAME=$(ls *.zip | head -1)
           NEW_NAME="${PLUGIN_NAME}-v${VERSION}-${GITHUB_SHA:0:7}.zip"
