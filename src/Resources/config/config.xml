@@ -2,9 +2,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
 
-    <!--
-        Настройки плагина доступны через админ-модуль:
-        Настройки → Система → Footer SEO Kategorien Links
-    -->
+    <card>
+        <title>Footer SEO Category Links</title>
+        <title lang="de-DE">Footer SEO Kategorien Links</title>
+    </card>
 
 </config>

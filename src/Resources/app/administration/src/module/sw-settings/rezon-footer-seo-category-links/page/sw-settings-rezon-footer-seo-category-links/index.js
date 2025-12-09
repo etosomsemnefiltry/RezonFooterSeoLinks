@@ -2,7 +2,7 @@ import template from './sw-settings-rezon-footer-seo-category-links.html.twig';
 import './sw-settings-rezon-footer-seo-category-links.scss';
 
 const { Component, Mixin } = Shopware;
-const { Criteria } = Shopware.Data;
+const { Criteria, EntityCollection } = Shopware.Data;
 
 Component.register('sw-settings-rezon-footer-seo-category-links', {
     template,
@@ -73,7 +73,7 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 const categoryIds = config[`block${i}Categories`] || [];
 
                 if (categoryIds.length === 0) {
-                    this.categoryCollections[`block${i}`] = this.createEmptyCollection();
+                    this.$set(this.categoryCollections, `block${i}`, this.createEmptyCollection());
                     continue;
                 }
 
@@ -88,18 +88,35 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                         inheritance: true,
                     })
                     .then((result) => {
-                        this.$set(this.categoryCollections, `block${i}`, result);
+                        // Сохраняем порядок из конфигурации
+                        const orderedCollection = new EntityCollection(
+                            this.categoryRepository.route,
+                            this.categoryRepository.schema.entity,
+                            Shopware.Context.api,
+                            this.categoryCriteria,
+                        );
+
+                        categoryIds.forEach((categoryId) => {
+                            const category = result.get(categoryId);
+                            if (category) {
+                                orderedCollection.add(category);
+                            }
+                        });
+
+                        this.$set(this.categoryCollections, `block${i}`, orderedCollection);
                     })
                     .catch(() => {
-                        this.categoryCollections[`block${i}`] = this.createEmptyCollection();
+                        this.$set(this.categoryCollections, `block${i}`, this.createEmptyCollection());
                     });
             }
         },
 
         createEmptyCollection() {
-            return this.categoryRepository.create(
+            return new EntityCollection(
+                this.categoryRepository.route,
+                this.categoryRepository.schema.entity,
                 Shopware.Context.api,
-                this.categoryCriteria
+                this.categoryCriteria,
             );
         },
 
