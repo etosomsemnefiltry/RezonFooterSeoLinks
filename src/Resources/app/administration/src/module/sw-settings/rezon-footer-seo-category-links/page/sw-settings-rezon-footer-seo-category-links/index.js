@@ -46,6 +46,39 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
         },
     },
 
+    watch: {
+        'categoryCollections.block1': {
+            handler() {
+                this.updateBlockConfig(1);
+            },
+            deep: true,
+        },
+        'categoryCollections.block2': {
+            handler() {
+                this.updateBlockConfig(2);
+            },
+            deep: true,
+        },
+        'categoryCollections.block3': {
+            handler() {
+                this.updateBlockConfig(3);
+            },
+            deep: true,
+        },
+        'categoryCollections.block4': {
+            handler() {
+                this.updateBlockConfig(4);
+            },
+            deep: true,
+        },
+        'categoryCollections.block5': {
+            handler() {
+                this.updateBlockConfig(5);
+            },
+            deep: true,
+        },
+    },
+
     created() {
         this.createdComponent();
     },
@@ -70,45 +103,49 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
 
         loadCategoryCollections(config) {
             for (let i = 1; i <= 5; i++) {
-                const categoryIds = config[`block${i}Categories`] || [];
-
-                if (categoryIds.length === 0) {
-                    this.$set(this.categoryCollections, `block${i}`, this.createEmptyCollection());
-                    continue;
-                }
-
-                const criteria = new Criteria(1, 100);
-                criteria.setIds(categoryIds);
-                criteria.addAssociation('media');
-                criteria.addAssociation('parent');
-
-                this.categoryRepository
-                    .search(criteria, {
-                        ...Shopware.Context.api,
-                        inheritance: true,
-                    })
-                    .then((result) => {
-                        // Сохраняем порядок из конфигурации
-                        const orderedCollection = new EntityCollection(
-                            this.categoryRepository.route,
-                            this.categoryRepository.schema.entity,
-                            Shopware.Context.api,
-                            this.categoryCriteria,
-                        );
-
-                        categoryIds.forEach((categoryId) => {
-                            const category = result.get(categoryId);
-                            if (category) {
-                                orderedCollection.add(category);
-                            }
-                        });
-
-                        this.$set(this.categoryCollections, `block${i}`, orderedCollection);
-                    })
-                    .catch(() => {
-                        this.$set(this.categoryCollections, `block${i}`, this.createEmptyCollection());
-                    });
+                this.initCategoryCollection(i, config[`block${i}Categories`] || []);
             }
+        },
+
+        initCategoryCollection(blockNumber, categoryIds) {
+            const blockKey = `block${blockNumber}`;
+
+            if (!categoryIds || !Array.isArray(categoryIds) || categoryIds.length === 0) {
+                this.categoryCollections[blockKey] = new EntityCollection(
+                    this.categoryRepository.route,
+                    this.categoryRepository.schema.entity,
+                    Shopware.Context.api,
+                    this.categoryCriteria,
+                );
+                return;
+            }
+
+            const criteria = new Criteria(1, 100);
+            criteria.setIds(categoryIds);
+            criteria.addAssociation('media');
+            criteria.addAssociation('parent');
+
+            this.categoryRepository
+                .search(criteria, {
+                    ...Shopware.Context.api,
+                    inheritance: true,
+                })
+                .then((result) => {
+                    this.categoryCollections[blockKey] = result;
+                })
+                .catch(() => {
+                    this.categoryCollections[blockKey] = new EntityCollection(
+                        this.categoryRepository.route,
+                        this.categoryRepository.schema.entity,
+                        Shopware.Context.api,
+                        this.categoryCriteria,
+                    );
+                });
+        },
+
+        updateBlockConfig(blockNumber) {
+            const collection = this.categoryCollections[`block${blockNumber}`];
+            // Метод нужен для watch, но сохранение делаем в onSave
         },
 
         createEmptyCollection() {
@@ -131,8 +168,7 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 let categoryIds = [];
 
                 if (collection && collection.length > 0) {
-                    // Ограничиваем до 5 категорий
-                    categoryIds = collection.slice(0, 5).map((category) => category.id);
+                    categoryIds = collection.map((category) => category.id).slice(0, 5);
                 }
 
                 config[`RezonFooterSeoCategoryLinks.config.block${i}Categories`] = categoryIds;
@@ -161,8 +197,20 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
         onCategoryChange(blockNumber, collection) {
             // Ограничиваем до 5 категорий
             if (collection && collection.length > 5) {
-                const limitedCollection = collection.slice(0, 5);
-                this.$set(this.categoryCollections, `block${blockNumber}`, limitedCollection);
+                const limitedCollection = new EntityCollection(
+                    this.categoryRepository.route,
+                    this.categoryRepository.schema.entity,
+                    Shopware.Context.api,
+                    this.categoryCriteria,
+                );
+                
+                for (let i = 0; i < 5; i++) {
+                    if (collection[i]) {
+                        limitedCollection.add(collection[i]);
+                    }
+                }
+                
+                this.categoryCollections[`block${blockNumber}`] = limitedCollection;
                 this.createNotificationWarning({
                     title: this.$tc('rezon-footer-seo-category-links.general.limitReachedTitle'),
                     message: this.$tc('rezon-footer-seo-category-links.general.limitReachedMessage'),
@@ -188,11 +236,31 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
             }
 
             let breadcrumb = null;
-
+            
             if (category.translated && category.translated.breadcrumb) {
                 breadcrumb = category.translated.breadcrumb;
-            } else if (category.breadcrumb) {
+            } 
+            else if (category.breadcrumb) {
                 breadcrumb = category.breadcrumb;
+            }
+            else if (category.attributes && category.attributes.breadcrumb) {
+                breadcrumb = category.attributes.breadcrumb;
+            }
+            else if (category.attributes && category.attributes.translated && category.attributes.translated.breadcrumb) {
+                breadcrumb = category.attributes.translated.breadcrumb;
+            }
+            else if (category.parent) {
+                const parentName = category.parent.translated?.name || category.parent.name || '';
+                const categoryName = this.getCategoryDisplayName(category);
+                if (parentName && parentName !== categoryName) {
+                    if (category.parent.parent) {
+                        const grandParentName = category.parent.parent.translated?.name || category.parent.parent.name || '';
+                        if (grandParentName && grandParentName !== parentName) {
+                            return `${grandParentName} > ${parentName}`;
+                        }
+                    }
+                    return parentName;
+                }
             }
 
             if (!breadcrumb) {
@@ -200,9 +268,11 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
             }
 
             let breadcrumbNames = [];
-
+            
             if (Array.isArray(breadcrumb)) {
                 breadcrumbNames = breadcrumb.filter((item) => item && String(item).trim()).map((item) => String(item).trim());
+            } else if (typeof breadcrumb === 'object' && breadcrumb !== null) {
+                breadcrumbNames = Object.values(breadcrumb).filter((item) => item && String(item).trim()).map((item) => String(item).trim());
             } else if (typeof breadcrumb === 'string') {
                 breadcrumbNames = breadcrumb.split(' > ').filter(Boolean).map((item) => item.trim());
             }
@@ -212,6 +282,14 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
             }
 
             return breadcrumbNames.slice(0, -1).join(' > ');
+        },
+
+        isSelected(categoryId, collection) {
+            if (!collection) {
+                return false;
+            }
+
+            return collection.has(categoryId);
         },
 
         fetchCategories(searchTerm = '', limit = 25) {
@@ -235,17 +313,8 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 }));
         },
 
-        isSelected(categoryId, collection) {
-            if (!collection) {
-                return false;
-            }
-
-            return collection.has(categoryId);
-        },
-
         saveFinish() {
             this.isSaveSuccessful = false;
         },
     },
 });
-
