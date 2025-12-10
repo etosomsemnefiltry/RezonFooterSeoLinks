@@ -17,7 +17,7 @@
       "limitReachedMessage": "You can select a maximum of 5 categories per block",
       "keywordLabel": "Additional Keyword",
       "keywordPlaceholder": "Enter keyword (e.g. 'Voucher')",
-      "keywordHelpText": "This word will be displayed additionally for each category link in this block"
+      "keywordHelpText": "Optional: Enter a word here that will be automatically displayed after each category link in this block. Example: If you enter 'Voucher', each link will be displayed as 'Category Name Voucher'."
     }
   }
 }
