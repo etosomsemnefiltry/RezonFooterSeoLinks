@@ -17,6 +17,7 @@
 
         <service id="RezonFooterSeoCategoryLinks\Controller\Admin\FooterCategoryLinksConfigController">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="system_config.repository"/>
             <tag name="controller.service_arguments"/>
         </service>
     </services>

@@ -179,7 +179,8 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
             }
 
             // Сохраняем через наш кастомный endpoint, минуя валидацию домена
-            const url = '/api/_action/rezon-footer-seo-category-links/save-config';
+            const apiPath = Shopware.Context.api.apiPath || '/api';
+            const url = `${apiPath}/_action/rezon-footer-seo-category-links/save-config`;
             const payload = {
                 config: config,
                 salesChannelId: this.salesChannelId,
