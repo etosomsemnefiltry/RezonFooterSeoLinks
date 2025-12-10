@@ -1,0 +1,4 @@
+rezon_footer_seo_category_links:
+    resource: ../../Controller/**/*Controller.php
+    type: annotation
+
