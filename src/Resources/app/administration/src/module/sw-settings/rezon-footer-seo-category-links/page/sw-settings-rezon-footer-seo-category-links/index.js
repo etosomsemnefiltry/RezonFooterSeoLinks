@@ -10,7 +10,6 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
     inject: [
         'repositoryFactory',
         'systemConfigApiService',
-        'httpClient',
     ],
 
     mixins: [
@@ -180,23 +179,30 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
             }
 
             // Сохраняем через наш кастомный endpoint, минуя валидацию домена
-            this.httpClient.post('/api/_action/rezon-footer-seo-category-links/save-config', {
+            const url = '/api/_action/rezon-footer-seo-category-links/save-config';
+            const payload = {
                 config: config,
                 salesChannelId: this.salesChannelId,
-            }, {
+            };
+
+            fetch(url, {
+                method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'sw-context-token': Shopware.Context.api.authToken.accessToken,
                 },
+                body: JSON.stringify(payload),
             })
-                .then((response) => {
-                    if (response.data.success) {
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
                         this.isSaveSuccessful = true;
                         this.createNotificationSuccess({
                             title: this.$tc('rezon-footer-seo-category-links.general.saveSuccessTitle'),
                             message: this.$tc('rezon-footer-seo-category-links.general.saveSuccessMessage'),
                         });
                     } else {
-                        throw new Error(response.data.message || 'Save failed');
+                        throw new Error(data.message || 'Save failed');
                     }
                 })
                 .catch((error) => {
