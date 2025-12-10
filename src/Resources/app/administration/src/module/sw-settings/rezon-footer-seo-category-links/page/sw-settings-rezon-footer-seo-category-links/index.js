@@ -92,10 +92,19 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
         loadConfig() {
             this.isLoading = true;
 
-            this.systemConfigApiService
-                .getValues('RezonFooterSeoCategoryLinks.config', this.salesChannelId)
-                .then((config) => {
-                    this.loadCategoryCollections(config);
+            const url = '/api/_action/rezon-footer-seo-category-links/get-config';
+            const params = this.salesChannelId ? `?salesChannelId=${this.salesChannelId}` : '';
+
+            this.httpClient.get(url + params, {
+                headers: {
+                    'sw-context-token': Shopware.Context.api.authToken.accessToken,
+                },
+            })
+                .then((response) => {
+                    this.loadCategoryCollections(response.data.config || {});
+                })
+                .catch(() => {
+                    this.loadCategoryCollections({});
                 })
                 .finally(() => {
                     this.isLoading = false;
@@ -175,25 +184,25 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 config[`RezonFooterSeoCategoryLinks.config.block${i}Categories`] = categoryIds;
             }
 
-            // Сохраняем напрямую через API, минуя валидацию домена
-            const url = this.salesChannelId 
-                ? `/api/_action/system-config/sales-channel/${this.salesChannelId}`
-                : '/api/_action/system-config';
-
-            const payload = {};
-            payload[null] = config;
-
-            this.httpClient.post(url, payload, {
+            // Сохраняем через наш кастомный endpoint, минуя валидацию домена
+            this.httpClient.post('/api/_action/rezon-footer-seo-category-links/save-config', {
+                config: config,
+                salesChannelId: this.salesChannelId,
+            }, {
                 headers: {
                     'sw-context-token': Shopware.Context.api.authToken.accessToken,
                 },
             })
-                .then(() => {
-                    this.isSaveSuccessful = true;
-                    this.createNotificationSuccess({
-                        title: this.$tc('rezon-footer-seo-category-links.general.saveSuccessTitle'),
-                        message: this.$tc('rezon-footer-seo-category-links.general.saveSuccessMessage'),
-                    });
+                .then((response) => {
+                    if (response.data.success) {
+                        this.isSaveSuccessful = true;
+                        this.createNotificationSuccess({
+                            title: this.$tc('rezon-footer-seo-category-links.general.saveSuccessTitle'),
+                            message: this.$tc('rezon-footer-seo-category-links.general.saveSuccessMessage'),
+                        });
+                    } else {
+                        throw new Error(response.data.message || 'Save failed');
+                    }
                 })
                 .catch((error) => {
                     console.error('Save error:', error);
