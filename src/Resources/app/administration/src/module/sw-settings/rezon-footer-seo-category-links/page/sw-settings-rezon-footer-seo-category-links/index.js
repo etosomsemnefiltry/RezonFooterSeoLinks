@@ -107,6 +107,7 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 ...(contextToken ? { 'sw-context-token': contextToken } : {}),
             };
 
+            
             fetch(url.toString(), { method: 'GET', headers })
                 .then((response) => response.json())
                 .then((data) => {
