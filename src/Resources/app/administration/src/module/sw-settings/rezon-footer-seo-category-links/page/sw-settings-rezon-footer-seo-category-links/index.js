@@ -91,13 +91,29 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
         loadConfig() {
             this.isLoading = true;
 
-            // Используем systemConfigApiService для загрузки (работает без проблем)
-            this.systemConfigApiService
-                .getValues('RezonFooterSeoCategoryLinks.config', this.salesChannelId)
-                .then((config) => {
-                    this.loadCategoryCollections(config);
+            const loginService = Shopware.Service('loginService');
+            const authToken = loginService.getToken();
+            const contextToken = Shopware.Context.api?.contextToken || authToken;
+            const apiPath = Shopware.Context.api.apiPath || '/api';
+            const url = new URL(`${apiPath}/_action/rezon-footer-seo-category-links/get-config`, window.location.origin);
+
+            if (this.salesChannelId) {
+                url.searchParams.set('salesChannelId', this.salesChannelId);
+            }
+
+            const headers = {
+                'Accept': 'application/json',
+                ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+                ...(contextToken ? { 'sw-context-token': contextToken } : {}),
+            };
+
+            fetch(url.toString(), { method: 'GET', headers })
+                .then((response) => response.json())
+                .then((data) => {
+                    this.loadCategoryCollections(data.config || {});
                 })
-                .catch(() => {
+                .catch((error) => {
+                    console.error('Load config error:', error);
                     this.loadCategoryCollections({});
                 })
                 .finally(() => {
