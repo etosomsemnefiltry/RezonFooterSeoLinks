@@ -186,15 +186,26 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 salesChannelId: this.salesChannelId,
             };
 
-            const authToken = Shopware.Context.api.authToken?.accessToken;
-            const contextToken = Shopware.Context.api.contextToken || Shopware.Context.api.authToken?.accessToken;
+            const loginService = Shopware.Service('loginService');
+            const authToken = loginService.getToken();
+            const contextToken = loginService.getContextToken() || Shopware.Context.api.contextToken || authToken;
+
+            if (!authToken) {
+                console.error('Save error: auth token is missing');
+                this.createNotificationError({
+                    title: this.$tc('rezon-footer-seo-category-links.general.saveErrorTitle'),
+                    message: this.$tc('rezon-footer-seo-category-links.general.saveErrorMessage'),
+                });
+                this.isLoading = false;
+                return;
+            }
 
             fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+                    Authorization: `Bearer ${authToken}`,
                     ...(contextToken ? { 'sw-context-token': contextToken } : {}),
                 },
                 body: JSON.stringify(payload),
