@@ -19,6 +19,11 @@
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <tag name="controller.service_arguments"/>
         </service>
+
+        <service id="RezonFooterSeoCategoryLinks\Twig\FooterCategoryLinksExtension">
+            <argument type="service" id="RezonFooterSeoCategoryLinks\Service\FooterCategoryService"/>
+            <tag name="twig.extension"/>
+        </service>
     </services>
 
 </container>

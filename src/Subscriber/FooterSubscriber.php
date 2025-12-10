@@ -31,7 +31,6 @@ class FooterSubscriber implements EventSubscriberInterface
 
     public function onPageLoaded(PageLoadedEvent $event): void
     {
-        // Добавляем блоки категорий на все страницы, где есть футер
         $this->addCategoryBlocks($event);
     }
 
@@ -46,9 +45,24 @@ class FooterSubscriber implements EventSubscriberInterface
             $salesChannelContext->getSalesChannelId()
         );
 
+        $blocksForTwig = [];
         if (!empty($blocks)) {
-            $page->addExtension('rezonFooterCategoryBlocks', new \ArrayObject($blocks));
+            foreach ($blocks as $block) {
+                $categoriesArray = [];
+                if ($block['categories'] instanceof \Shopware\Core\Content\Category\CategoryCollection) {
+                    $categoriesArray = $block['categories']->getElements();
+                } elseif (is_array($block['categories'])) {
+                    $categoriesArray = $block['categories'];
+                }
+                
+                $blocksForTwig[] = [
+                    'title' => $block['title'] ?? '',
+                    'categories' => $categoriesArray,
+                ];
+            }
         }
+        
+        $page->addExtension('rezonFooterCategoryBlocks', $blocksForTwig);
     }
 }
 

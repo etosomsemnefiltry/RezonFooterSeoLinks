@@ -1,8 +1,7 @@
 {% sw_extends '@Storefront/storefront/layout/footer/footer.html.twig' %}
 
-{% block layout_footer_inner_container %}
+{%- block layout_footer_navigation -%}
     {{ parent() }}
-
     {% sw_include '@RezonFooterSeoCategoryLinks/storefront/component/footer/rezon-footer-category-links.html.twig' %}
-{% endblock %}
+{%- endblock -%}
 

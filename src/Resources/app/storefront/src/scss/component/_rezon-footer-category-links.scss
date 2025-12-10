@@ -1,77 +1,51 @@
-.footer-category-links {
-    background-color: #f9fafb;
-    border-top: 1px solid #e5e8eb;
-    padding: 30px 0;
-    margin-top: 40px;
+#footerColumnsCategories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  text-align: left;
+  background-color: transparent;
+  max-width: 1400px;
+  padding: 40px 0 0 0;
+  margin: 0 auto 0;
+  border-top: 1px solid #b3b3b3; // разделитель сверху
+}
 
-    &-row {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 30px;
-        margin: 0;
+@media (min-width: 768px) {
+  #footerColumnsCategories {
+    border-top: 2px solid #b3b3b3;
+  }
+}
 
-        @media (max-width: 1200px) {
-            grid-template-columns: repeat(4, 1fr);
-        }
+.footer-seo-column {
+  margin-bottom: 18px;
 
-        @media (max-width: 992px) {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-
-        @media (max-width: 768px) {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        @media (max-width: 576px) {
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
+  .footer-column-content-inner {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
 
-    &-block {
-        &-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #52667a;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+    li {
+      margin-bottom: 0px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
-    &-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+    a.footer-link,
+    span.footer-category-links-text {
+      color: #555;
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
-    &-item {
-        margin-bottom: 8px;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
+    a.footer-link:hover {
+      text-decoration: none;
+      color: #333;
     }
-
-    &-link {
-        color: #758ca3;
-        text-decoration: none;
-        font-size: 13px;
-        line-height: 1.5;
-        transition: color 0.2s ease;
-
-        &:hover {
-            color: #189eff;
-            text-decoration: underline;
-        }
-    }
-
-    &-text {
-        color: #758ca3;
-        font-size: 13px;
-        line-height: 1.5;
-    }
+  }
 }
 

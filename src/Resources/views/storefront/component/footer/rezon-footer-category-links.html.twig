@@ -1,62 +1,66 @@
 {% block rezon_footer_category_links %}
-    {% set categoryBlocks = page.getExtension('rezonFooterCategoryBlocks') %}
+    {# Получаем данные через Twig function напрямую из сервиса #}
+    {% set categoryBlocks = context is defined ? getFooterCategoryBlocks(context) : [] %}
+    {% set basePath = app.request.basePath|default('') %}
 
-    {% if categoryBlocks and categoryBlocks|length > 0 %}
-        <div class="footer-category-links">
-            {% block rezon_footer_category_links_container %}
-                <div class="container">
-                    <div class="row footer-category-links-row">
-                        {% for block in categoryBlocks %}
-                            {% block rezon_footer_category_links_block %}
-                                <div class="footer-category-links-block">
-                                    {% if block.title %}
-                                        {% block rezon_footer_category_links_block_title %}
-                                            <h4 class="footer-category-links-block-title">{{ block.title }}</h4>
-                                        {% endblock %}
-                                    {% endif %}
+    {% if categoryBlocks is defined and categoryBlocks is not null and categoryBlocks is not empty and categoryBlocks|length > 0 %}
+            <div id="footerColumnsCategories" class="row footer-columns" role="list">
+                {% for block in categoryBlocks %}
+                    <div class="col-md-2 footer-seo-column">
+                        
 
-                                    {% block rezon_footer_category_links_block_list %}
-                                        <ul class="footer-category-links-list">
-                                            {% for category in block.categories %}
-                                                {% block rezon_footer_category_links_item %}
-                                                    <li class="footer-category-links-item">
-                                                        {% set categoryUrl = null %}
-                                                        
-                                                        {% if category.externalLink %}
-                                                            {% set categoryUrl = category.externalLink %}
-                                                        {% elseif category.seoUrls and category.seoUrls|length > 0 %}
-                                                            {% for seoUrl in category.seoUrls %}
-                                                                {% if seoUrl.isCanonical %}
-                                                                    {% set categoryUrl = '/' ~ seoUrl.seoPathInfo %}
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                            {% if not categoryUrl %}
-                                                                {% set seoUrl = category.seoUrls|first %}
-                                                                {% set categoryUrl = '/' ~ seoUrl.seoPathInfo %}
-                                                            {% endif %}
-                                                        {% endif %}
+                        <div id="collapseFooterSeoContent{{ loop.index }}"
+                             class="footer-column-content collapse js-footer-column-content show"
+                             aria-labelledby="collapseFooterSeo{{ loop.index }}"
+                             role="listitem">
+                            <div class="footer-column-content-inner">
+                                <ul class="list-unstyled footer-category-links-list">
+                                    {% for category in block.categories %}
+                                        <li class="footer-link-item">
+                                            {% set categoryName = category.translated.name|default(category.name) %}
+                                            {% set categoryUrl = null %}
 
-                                                        {% if categoryUrl %}
-                                                            <a href="{{ categoryUrl }}" class="footer-category-links-link" title="{{ category.translated.name|default(category.name) }}">
-                                                                {{ category.translated.name|default(category.name) }}
-                                                            </a>
-                                                        {% else %}
-                                                            <span class="footer-category-links-text">
-                                                                {{ category.translated.name|default(category.name) }}
-                                                            </span>
-                                                        {% endif %}
-                                                    </li>
-                                                {% endblock %}
-                                            {% endfor %}
-                                        </ul>
-                                    {% endblock %}
-                                </div>
-                            {% endblock %}
-                        {% endfor %}
+                                            {% if category.seoUrls is defined and category.seoUrls|length > 0 %}
+                                                {% for seoUrl in category.seoUrls %}
+                                                    {% if seoUrl.isCanonical is defined and seoUrl.isCanonical %}
+                                                        {% set categoryUrl = '/' ~ seoUrl.seoPathInfo %}
+                                                        {% break %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if not categoryUrl %}
+                                                    {% set seoUrl = category.seoUrls|first %}
+                                                    {% if seoUrl.seoPathInfo is defined %}
+                                                        {% set categoryUrl = '/' ~ seoUrl.seoPathInfo %}
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if not categoryUrl and category.id is defined %}
+                                                {% set categoryUrl = path('frontend.navigation.page', { navigationId: category.id }) %}
+                                            {% endif %}
+
+                                            {% if categoryUrl and categoryUrl starts with('/') %}
+                                                {% set categoryUrl = basePath ~ categoryUrl %}
+                                            {% endif %}
+
+                                            {% if categoryUrl %}
+                                                <a class="footer-link"
+                                                   href="{{ categoryUrl }}"
+                                                   title="{{ categoryName }}">
+                                                    {{ categoryName }}{% if block.keyword is defined and block.keyword is not empty %} {{ block.keyword }}{% endif %}
+                                                </a>
+                                            {% else %}
+                                                <span class="footer-category-links-text">{{ categoryName }}{% if block.keyword is defined and block.keyword is not empty %} {{ block.keyword }}{% endif %}</span>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            {% endblock %}
-        </div>
+                {% endfor %}
+            </div>
+
     {% endif %}
 {% endblock %}
 

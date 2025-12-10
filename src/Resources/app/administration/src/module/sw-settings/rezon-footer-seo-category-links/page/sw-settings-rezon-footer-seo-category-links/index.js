@@ -28,6 +28,13 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 block4: null,
                 block5: null,
             },
+            blockKeywords: {
+                block1: '',
+                block2: '',
+                block3: '',
+                block4: '',
+                block5: '',
+            },
         };
     },
 
@@ -125,6 +132,8 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
         loadCategoryCollections(config) {
             for (let i = 1; i <= 5; i++) {
                 this.initCategoryCollection(i, config[`block${i}Categories`] || []);
+                // Загружаем ключевое слово для блока
+                this.blockKeywords[`block${i}`] = config[`block${i}Keyword`] || '';
             }
         },
 
@@ -193,6 +202,8 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 }
 
                 config[`RezonFooterSeoCategoryLinks.config.block${i}Categories`] = categoryIds;
+                // Сохраняем ключевое слово для блока
+                config[`RezonFooterSeoCategoryLinks.config.block${i}Keyword`] = this.blockKeywords[`block${i}`] || '';
             }
 
             // Сохраняем через наш кастомный endpoint, минуя валидацию домена

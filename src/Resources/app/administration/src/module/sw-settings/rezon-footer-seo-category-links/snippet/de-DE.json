@@ -14,7 +14,10 @@
       "saveErrorTitle": "Fehler",
       "saveErrorMessage": "Beim Speichern der Konfiguration ist ein Fehler aufgetreten",
       "limitReachedTitle": "Limit erreicht",
-      "limitReachedMessage": "Sie können maximal 5 Kategorien pro Block auswählen"
+      "limitReachedMessage": "Sie können maximal 5 Kategorien pro Block auswählen",
+      "keywordLabel": "Zusätzliches Schlüsselwort",
+      "keywordPlaceholder": "Schlüsselwort eingeben (z.B. 'Gutschein')",
+      "keywordHelpText": "Dieses Wort wird zusätzlich zu jeder Kategorie-Link in diesem Block angezeigt"
     }
   }
 }

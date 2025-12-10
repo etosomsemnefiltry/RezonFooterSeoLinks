@@ -7,7 +7,6 @@ use Shopware\Core\Content\Category\CategoryDefinition;
 use Shopware\Core\Content\Category\CategoryEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -15,11 +14,11 @@ use Shopware\Core\System\SystemConfig\SystemConfigService;
 class FooterCategoryService
 {
     private SystemConfigService $systemConfigService;
-    private EntityRepositoryInterface $categoryRepository;
+    private EntityRepository $categoryRepository;
 
     public function __construct(
         SystemConfigService $systemConfigService,
-        EntityRepositoryInterface $categoryRepository
+        EntityRepository $categoryRepository
     ) {
         $this->systemConfigService = $systemConfigService;
         $this->categoryRepository = $categoryRepository;
@@ -35,10 +34,23 @@ class FooterCategoryService
         $blocks = [];
 
         for ($i = 1; $i <= 5; $i++) {
-            $categoryIds = $this->systemConfigService->get(
-                'RezonFooterSeoCategoryLinks.config.block' . $i . 'Categories',
-                $salesChannelId
-            );
+            $configKey = 'RezonFooterSeoCategoryLinks.config.block' . $i . 'Categories';
+            
+            // Сначала пробуем настройки конкретного канала, затем глобальные
+            $categoryIds = $this->systemConfigService->get($configKey, $salesChannelId);
+            if (empty($categoryIds) || !is_array($categoryIds)) {
+                $categoryIds = $this->systemConfigService->get($configKey);
+            }
+            
+            // Возможен вариант, что данные сохранены как JSON-строка
+            if (is_string($categoryIds)) {
+                $decoded = json_decode($categoryIds, true);
+                if (is_array($decoded)) {
+                    $categoryIds = $decoded;
+                } else {
+                    $categoryIds = null;
+                }
+            }
 
             if (empty($categoryIds) || !is_array($categoryIds)) {
                 continue;
@@ -53,9 +65,17 @@ class FooterCategoryService
             // Формируем заголовок из breadcrumbs первой категории
             $title = $this->generateBlockTitle($categories->first());
 
+            // Загружаем ключевое слово для блока
+            $keywordKey = 'RezonFooterSeoCategoryLinks.config.block' . $i . 'Keyword';
+            $keyword = $this->systemConfigService->get($keywordKey, $salesChannelId);
+            if (empty($keyword)) {
+                $keyword = $this->systemConfigService->get($keywordKey);
+            }
+
             $blocks[] = [
                 'title' => $title,
                 'categories' => $categories,
+                'keyword' => $keyword ?: '',
             ];
         }
 

@@ -65,6 +65,13 @@ class FooterCategoryLinksConfigController extends AbstractController
                 $salesChannelId
             );
             $config['block' . $i . 'Categories'] = $value ?: [];
+            
+            // Загружаем ключевое слово для блока
+            $keyword = $this->systemConfigService->get(
+                'RezonFooterSeoCategoryLinks.config.block' . $i . 'Keyword',
+                $salesChannelId
+            );
+            $config['block' . $i . 'Keyword'] = $keyword ?: '';
         }
 
         return new JsonResponse(['config' => $config]);
