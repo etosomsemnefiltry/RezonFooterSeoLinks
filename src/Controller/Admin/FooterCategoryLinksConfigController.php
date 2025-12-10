@@ -3,16 +3,14 @@
 namespace RezonFooterSeoCategoryLinks\Controller\Admin;
 
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Core\Framework\Routing\Attribute\RouteScope;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * @RouteScope(scopes={"api"})
- */
+#[RouteScope(scopes: ['api'])]
 class FooterCategoryLinksConfigController extends AbstractController
 {
     private SystemConfigService $systemConfigService;
@@ -23,9 +21,12 @@ class FooterCategoryLinksConfigController extends AbstractController
         $this->systemConfigService = $systemConfigService;
     }
 
-    /**
-     * @Route("/_action/rezon-footer-seo-category-links/save-config", name="api.action.rezon.footer.seo.category.links.save.config", methods={"POST"})
-     */
+    #[Route(
+        path: '/api/_action/rezon-footer-seo-category-links/save-config',
+        name: 'api.action.rezon.footer.seo.category.links.save.config',
+        methods: ['POST'],
+        defaults: ['_routeScope' => ['api']]
+    )]
     public function saveConfig(Request $request, Context $context): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -47,9 +48,12 @@ class FooterCategoryLinksConfigController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/_action/rezon-footer-seo-category-links/get-config", name="api.action.rezon.footer.seo.category.links.get.config", methods={"GET"})
-     */
+    #[Route(
+        path: '/api/_action/rezon-footer-seo-category-links/get-config',
+        name: 'api.action.rezon.footer.seo.category.links.get.config',
+        methods: ['GET'],
+        defaults: ['_routeScope' => ['api']]
+    )]
     public function getConfig(Request $request): JsonResponse
     {
         $salesChannelId = $request->query->get('salesChannelId');

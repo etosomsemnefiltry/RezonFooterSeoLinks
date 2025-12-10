@@ -186,11 +186,16 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 salesChannelId: this.salesChannelId,
             };
 
+            const authToken = Shopware.Context.api.authToken?.accessToken;
+            const contextToken = Shopware.Context.api.contextToken || Shopware.Context.api.authToken?.accessToken;
+
             fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'sw-context-token': Shopware.Context.api.authToken.accessToken,
+                    'Accept': 'application/json',
+                    ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+                    ...(contextToken ? { 'sw-context-token': contextToken } : {}),
                 },
                 body: JSON.stringify(payload),
             })
