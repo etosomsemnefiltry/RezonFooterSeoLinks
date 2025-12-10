@@ -10,6 +10,7 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
     inject: [
         'repositoryFactory',
         'systemConfigApiService',
+        'httpClient',
     ],
 
     mixins: [
@@ -174,8 +175,19 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                 config[`RezonFooterSeoCategoryLinks.config.block${i}Categories`] = categoryIds;
             }
 
-            this.systemConfigApiService
-                .batchSave(config, this.salesChannelId)
+            // Сохраняем напрямую через API, минуя валидацию домена
+            const url = this.salesChannelId 
+                ? `/api/_action/system-config/sales-channel/${this.salesChannelId}`
+                : '/api/_action/system-config';
+
+            const payload = {};
+            payload[null] = config;
+
+            this.httpClient.post(url, payload, {
+                headers: {
+                    'sw-context-token': Shopware.Context.api.authToken.accessToken,
+                },
+            })
                 .then(() => {
                     this.isSaveSuccessful = true;
                     this.createNotificationSuccess({
