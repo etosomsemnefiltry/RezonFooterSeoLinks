@@ -183,7 +183,8 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
                         message: this.$tc('rezon-footer-seo-category-links.general.saveSuccessMessage'),
                     });
                 })
-                .catch(() => {
+                .catch((error) => {
+                    console.error('Save error:', error);
                     this.createNotificationError({
                         title: this.$tc('rezon-footer-seo-category-links.general.saveErrorTitle'),
                         message: this.$tc('rezon-footer-seo-category-links.general.saveErrorMessage'),

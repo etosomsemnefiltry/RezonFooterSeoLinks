@@ -5,6 +5,34 @@
     <card>
         <title>Footer SEO Category Links</title>
         <title lang="de-DE">Footer SEO Kategorien Links</title>
+        
+        <!-- Скрытые поля для регистрации домена в SystemConfig -->
+        <!-- Фактическая настройка происходит через админ-модуль -->
+        <input-field type="text">
+            <name>block1Categories</name>
+            <label>Block 1 Categories (hidden)</label>
+            <label lang="de-DE">Block 1 Kategorien (versteckt)</label>
+        </input-field>
+        <input-field type="text">
+            <name>block2Categories</name>
+            <label>Block 2 Categories (hidden)</label>
+            <label lang="de-DE">Block 2 Kategorien (versteckt)</label>
+        </input-field>
+        <input-field type="text">
+            <name>block3Categories</name>
+            <label>Block 3 Categories (hidden)</label>
+            <label lang="de-DE">Block 3 Kategorien (versteckt)</label>
+        </input-field>
+        <input-field type="text">
+            <name>block4Categories</name>
+            <label>Block 4 Categories (hidden)</label>
+            <label lang="de-DE">Block 4 Kategorien (versteckt)</label>
+        </input-field>
+        <input-field type="text">
+            <name>block5Categories</name>
+            <label>Block 5 Categories (hidden)</label>
+            <label lang="de-DE">Block 5 Kategorien (versteckt)</label>
+        </input-field>
     </card>
 
 </config>
