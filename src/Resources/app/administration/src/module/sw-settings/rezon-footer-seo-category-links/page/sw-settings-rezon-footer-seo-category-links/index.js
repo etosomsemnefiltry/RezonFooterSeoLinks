@@ -188,7 +188,8 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
 
             const loginService = Shopware.Service('loginService');
             const authToken = loginService.getToken();
-            const contextToken = loginService.getContextToken() || Shopware.Context.api.contextToken || authToken;
+            // В некоторых версиях loginService нет getContextToken, поэтому берём из Shopware.Context
+            const contextToken = Shopware.Context.api?.contextToken || authToken;
 
             if (!authToken) {
                 console.error('Save error: auth token is missing');
