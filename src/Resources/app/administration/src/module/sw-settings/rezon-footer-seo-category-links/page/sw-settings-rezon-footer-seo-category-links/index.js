@@ -92,16 +92,11 @@ Component.register('sw-settings-rezon-footer-seo-category-links', {
         loadConfig() {
             this.isLoading = true;
 
-            const url = '/api/_action/rezon-footer-seo-category-links/get-config';
-            const params = this.salesChannelId ? `?salesChannelId=${this.salesChannelId}` : '';
-
-            this.httpClient.get(url + params, {
-                headers: {
-                    'sw-context-token': Shopware.Context.api.authToken.accessToken,
-                },
-            })
-                .then((response) => {
-                    this.loadCategoryCollections(response.data.config || {});
+            // Используем systemConfigApiService для загрузки (работает без проблем)
+            this.systemConfigApiService
+                .getValues('RezonFooterSeoCategoryLinks.config', this.salesChannelId)
+                .then((config) => {
+                    this.loadCategoryCollections(config);
                 })
                 .catch(() => {
                     this.loadCategoryCollections({});
